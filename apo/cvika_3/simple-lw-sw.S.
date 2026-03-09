@@ -1,0 +1,119 @@
+// Template file with simple memory example
+// QtRVSim simulator https://github.com/cvut/qtrvsim/
+
+// template-cz.S				. example file
+
+// Direction to make interesting window viable
+#pragma qtrvsim show registers
+#pragma qtrvsim show memory
+
+.globl _start
+.option norelax
+
+.text
+
+_start:
+loop:
+	la x3, vect_a
+	
+	// DO UKOLU 5)
+//	la x8, vect_b
+//
+//
+//	// inicializace proměnných v do-while cyklu
+//
+//	addi x1, x0, 0 // i = 0
+//	addi x2, x0, 8 // i < 8
+//	addi x4, x0, 0 // sum = 0
+//
+//my_loop:
+//	// v každém průchodu do x5 načtu hodnotu z adresy x3
+//	lw x5, 0x0(x3)
+//
+//	// přičtu x5 k sumě
+//	add x4, x4, x5 // sum += x5
+//
+//	addi x3, x3, 4 // x3 = x3 + 4
+//	addi x8, x8, 4 // x8 = x8 + 4
+//	addi x1, x1, 1 // i = i + 1
+//	bne x1, x2, my_loop // if (x1 != x2) goto my_loop;
+//	
+//	// prumer = sum / 8
+//	// prumer = sum >> 3
+//	srli x6, x4, 3
+//	la x8, prumer
+//	sw x6, 0(x8)
+//	nop
+//	nop
+//	ebreak	
+	
+	
+//	// UKOL 6) Napište program, který prohodí číslo z adresy vect_a a vect_a+4
+//	lw x1, 0x0{x3)
+//	lw x2, 0x4(x3)
+//	
+//	sw x2, 0x0(x3) // x2 ulozim na zacatek vectoru a
+//	sw x1, 0x4(x3) // x1 ulozim na vector a + 4
+//	nop
+//	nop
+//	ebreak
+
+
+// // UKOL 7)  Upravte program, aby čísla z adresy vect_a a vect_a+4 prohodil pouze pokud bude číslo z adresy vect_a menší než číslo z adresy vect_a+4.
+//	lw x1, 0x0(x3)
+//	lw x2, 0x4(x3)
+//	
+//	slt x4, x1, x2 // v C by bylo - if (x1 < x2) x4 = 1, else x4 = 0
+//	beq x4, x0, skip // x4 != 0 goto skip -> x1 >= x2 goto skip
+//	// tim ze jsem udelal toto tak muzu vlastne preskocit to prohozeni a jit rovnou na skip
+//	// v assembleru musim preckocit pres label, nemuzu pres if else
+//	
+//	// alternativne: bge, x1, x2, skip (pokud x1 je vetsi nebo rovno x2 skocim na skip
+//	
+//	// to prohozeni
+//	sw x2, 0x0(x3)
+//	sw x1, 0x4(x3)
+//skip:
+//	nop
+//	nop
+//	ebreak
+
+
+// // UKOL 8) 8) Napište program, který provede jeden průchod bublinkového třídění čísel z vect_a.
+// budu potrebovat 2 for loopy
+	addi x5, x0, 0 // i = 0
+	addi x6, x0, 7 // vim ze mam 8 cisel tedy z j < 8 - 1
+	
+bubble_loop:
+	beq x5, x6, end
+	// načtu dvě položky z pole
+	lw x2, 0(x3)
+	lw x3, 0x4(x3)
+	// pokud i = N, skočím na bubble_end
+	bge x4, x2, skip
+	sw x3, 0x0(x1)
+	sw x2, 0x4(x1)
+	
+skip:		
+	addi x3, x3, 4 // vect_a += 4
+	addi x5, x5, 1 // i++
+	j bubble_loop // skočím na bubble loop
+	
+end:
+	nop
+	nop
+	ebreak	
+
+
+.data
+.org 0x400
+
+vect_a:
+	.word 8, 9, 3, 4, 5, 6, 7, 1
+prumer:
+	.word 0
+vect_b:
+	.word 0, 0, 0, 0, 0, 0, 0, 0
+
+//Specify location to show in memory window
+#program qtrvsim focus memory src_val
