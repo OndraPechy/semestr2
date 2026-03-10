@@ -14,7 +14,7 @@ public interface StatsInterface {
      *
      * @return average value
      */
-    double getAverage();
+    double  getAverage();
 
     /**
      * Calculates standard deviation from values saved within the instance.
