@@ -14,14 +14,16 @@ public class Stats implements StatsInterface {
 
     @Override
     public void addNumber(double number) {
-        numbers[arr_count] = number;
         ++arr_count;
-        if (arr_count == 10) {
-            System.out.println(getFormattedStatistics());
-            for (int i = 0; i < arr_count; ++i) {
+        if (arr_count > 10) {
+            for (int i = 0; i < arr_count - 1; ++i) {
                 numbers[i] = 0.0;
             }
-            arr_count = 0;
+            arr_count = 1;
+        }
+        numbers[arr_count - 1] = number;
+        if (arr_count == 10) {
+            System.out.println(getFormattedStatistics());
         }
     }
 
